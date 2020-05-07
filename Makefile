@@ -11,12 +11,12 @@
 # **************************************************************************** #
 
 NAME	= libasm.a
-CC		= nasm
+CC	= nasm
 CFLAGS	= -f elf64
 SRC_PATH= srcs/
 OBJ_PATH= objs/
 
-SRC_NAME= ft_strlen.s ft_strcpy.s ft_read.s ft_write.s ft_strdup.s
+SRC_NAME= ft_strlen.s ft_strcpy.s ft_read.s ft_write.s ft_strdup.s ft_strcmp.s
 OBJ_NAME= $(SRC_NAME:.s=.o)
 TESTER_PATH= test.c
 
@@ -36,14 +36,13 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "$(RED)[libasm] : $(DEF)Compilation..."
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	@ar rcs $(NAME) $(OBJ)
 	@echo "$(RED)[libasm] : $(DEF)Compilation                 $(GRN)[OK]$(DEF)"
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.s
 	@mkdir $(OBJ_PATH) 2> /dev/null || true
 	@echo "$(RED)[libasm] :$(DEF) Compiling $@"
-	@$(CC) $(CFLAGS) -o $@ $<
+	@$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	@rm -rf $(OBJ_PATH)
@@ -57,6 +56,6 @@ re: fclean all
 
 run: all
 	@echo "$(RED)[libasm] :$(DEF) Compiling $(TESTER_PATH)"
-	@gcc -fsanitize=address -g $(TESTER_PATH) $(NAME)
+	@clang -fsanitize=address $(TESTER_PATH) $(NAME)
 	@echo "$(GRN)Running..."
 	@./a.out

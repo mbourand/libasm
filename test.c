@@ -99,14 +99,16 @@ int test_read()
 			if ((fd = open(filename, O_RDONLY)) < 0)
 				strerror(errno);
 			int user = ft_read(fd, user_buf, buffers[i]);
+			int user_errno = errno;
 			close(fd);
 
 			if ((fd = open(filename, O_RDONLY)) < 0)
 				strerror(errno);
 			int original = read(fd, original_buf, buffers[i]);
+			int original_errno = errno;
 			close(fd);
 
-			if (original == user && strncmp(user_buf, original_buf, buffers[i]) == 0)
+			if (original == user && strncmp(user_buf, original_buf, buffers[i]) == 0 && (original < 0 ? original_errno == user_errno : 1))
 			{
 				printf("%sTest %d :\t%s[OK]\t", RESET, buf_len * j + i + 1, GREEN);
 				succeed++;
@@ -144,11 +146,13 @@ int test_write()
 		int original_fd = open(original_file, O_CREAT | O_RDWR, 0644);
 
 		int user = ft_write(user_fd, parameters[i], strlen(parameters[i]) - 15);
+		int user_errno = errno;
 		int original = write(original_fd, parameters[i], strlen(parameters[i]) - 15);
+		int original_errno = errno;
 
 		int diff = system("diff user_write.txt original_write.txt");
 		
-		if (diff == 0 && user == original)
+		if (diff == 0 && user == original && (original < 0 ? original_errno == user_errno : 1))
 		{
 			printf("%sTest %d :\t%s[OK]\t", RESET, i + 1, GREEN);
 			succeed++;
@@ -239,6 +243,5 @@ int main(void)
 
 	print_header("ft_strdup");
 	note += test_strdup();
-
 	printf("Note : %s%d/321\n", GREEN, note);
 }
