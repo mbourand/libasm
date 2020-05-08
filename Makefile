@@ -18,7 +18,7 @@ OBJ_PATH= objs/
 
 SRC_NAME= ft_strlen.s ft_strcpy.s ft_read.s ft_write.s ft_strdup.s ft_strcmp.s
 OBJ_NAME= $(SRC_NAME:.s=.o)
-TESTER_PATH= test.c
+TESTER_PATH= tester.c
 
 INC= -I incs/
 SRC= $(addprefix $(SRC_PATH), $(SRC_NAME))
